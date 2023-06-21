@@ -1,0 +1,16 @@
+on:
+  push:
+    # Only trigger on branches, not on tags.
+    branches: '**'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        commit: "$(git rev-list ${{ github.event.before}}..${{ github.sha}})"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "run test"
