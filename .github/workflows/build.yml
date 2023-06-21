@@ -5,10 +5,16 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get previous commits
+        run: echo "commits=$(git rev-list ${{ github.event.before}}..${{ github.sha}})" >> "$GITHUB_ENV"
+  second:
     strategy:
       matrix:
-        commit: $(git rev-list ${{ github.event.before}}..${{ github.sha}})
+        commit: ${{ env.commits }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "run test"
